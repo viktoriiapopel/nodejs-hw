@@ -12,8 +12,8 @@ import {
 const notesRoutes = Router();
 
 notesRoutes.get('/notes', getAllNotes);
-notesRoutes.get('/notes/:notetId', getNoteById);
+notesRoutes.get('/notes/:noteId', getNoteById);
 notesRoutes.post('/notes', createNote);
-notesRoutes.delete('/notes/:notetId', deleteNote);
-notesRoutes.patch('/notes/:notetId', updateNote);
+notesRoutes.delete('/notes/:noteId', deleteNote);
+notesRoutes.patch('/notes/:noteId', updateNote);
 export default notesRoutes;

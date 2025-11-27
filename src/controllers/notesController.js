@@ -37,10 +37,10 @@ export const deleteNote = async (req, res, next) => {
 };
 
 export const updateNote = async (req, res, next) => {
-  const { notetId } = req.params;
+  const { noteId } = req.params;
 
   const note = await Note.findOneAndUpdate(
-    { _id: notetId }, // Шукаємо по id
+    { _id: noteId }, // Шукаємо по id
     req.body,
     { new: true }, // повертаємо оновлений документ
   );
