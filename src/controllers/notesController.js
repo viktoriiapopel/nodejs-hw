@@ -6,22 +6,21 @@ export const getAllNotes = async (req, res) => {
   const { page = 1, perPage = 10, tag, search } = req.query;
 
   const skip = (page - 1) * perPage;
-
-  // Створюємо базовий запит до колекції
-  const notesQwery = Note.find();
   const filter = {};
-
   if (tag) {
     filter.tag = tag;
   }
 
   if (search !== undefined) {
-    filter.title = { $regex: search, $options: 'i' };
+    filter.$text = { $search: search };
   }
+
+  // Створюємо базовий запит до колекції
+  const notesQwery = Note.find(filter);
 
   // Виконуємо одразу два запити паралельно
   const [totalNotes, notes] = await Promise.all([
-    notesQwery.clone().countDocuments(),
+    Note.countDocuments(filter),
     notesQwery.skip(skip).limit(perPage),
   ]);
 
