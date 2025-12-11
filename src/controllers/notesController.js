@@ -6,7 +6,7 @@ export const getAllNotes = async (req, res) => {
   const { page = 1, perPage = 10, tag, search } = req.query;
 
   const skip = (page - 1) * perPage;
-  const filter = {};
+  const filter = { userId: req.user._id };
   if (tag) {
     filter.tag = tag;
   }
@@ -16,7 +16,7 @@ export const getAllNotes = async (req, res) => {
   }
 
   // Створюємо базовий запит до колекції
-  const notesQwery = Note.find({ userId: req.user._id });
+  const notesQwery = Note.find(filter);
 
   // Виконуємо одразу два запити паралельно
   const [totalNotes, notes] = await Promise.all([
