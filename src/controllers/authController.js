@@ -1,5 +1,3 @@
-// src/controllers/authController.js
-
 import bcrypt from 'bcrypt';
 import createHttpError from 'http-errors';
 import { User } from '../models/user.js';
@@ -14,13 +12,10 @@ export const registerUser = async (req, res, next) => {
     return next(createHttpError(400, 'Email in use'));
   }
 
-  // Хешуємо пароль
-  const hashedPassword = await bcrypt.hash(password, 10);
-
   // Створюємо користувача
   const newUser = await User.create({
     email,
-    password: hashedPassword,
+    password,
   });
 
   const newSession = await createSession(newUser._id);
@@ -30,8 +25,6 @@ export const registerUser = async (req, res, next) => {
   // Відправляємо дані користувача (без пароля) у відповіді
   res.status(201).json(newUser);
 };
-
-// src/controllers/authController.js
 
 export const loginUser = async (req, res, next) => {
   const { email, password } = req.body;
@@ -55,10 +48,6 @@ export const loginUser = async (req, res, next) => {
   res.status(200).json(user);
 };
 
-// src/controllers/authController.js
-
-// Решта коду файла
-
 export const logoutUser = async (req, res) => {
   const { sessionId } = req.cookies;
 
@@ -72,10 +61,6 @@ export const logoutUser = async (req, res) => {
 
   res.status(204).send();
 };
-
-// src/controllers/authController.js
-
-// Решта коду файла
 
 export const refreshUserSession = async (req, res, next) => {
   // 1. Знаходимо поточну сесію за id сесії та рефреш токеном

@@ -1,5 +1,3 @@
-// src/models/user.js
-
 import { model, Schema } from 'mongoose';
 import bcrypt from 'bcrypt';
 
@@ -24,11 +22,10 @@ const userSchema = new Schema(
   { timestamps: true, versionKey: false },
 );
 
-userSchema.pre('save', function (next) {
+userSchema.pre('save', function () {
   if (!this.username) {
     this.username = this.email;
   }
-  next();
 });
 
 userSchema.pre('save', async function () {

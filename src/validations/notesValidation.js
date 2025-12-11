@@ -1,5 +1,3 @@
-// src/validations/studentsValidation.js
-
 import { Joi, Segments } from 'celebrate';
 import { TAGS } from '../constants/tags.js';
 import { isValidObjectId } from 'mongoose';

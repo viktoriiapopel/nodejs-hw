@@ -1,5 +1,3 @@
-// src/models/student.js
-
 import { Schema, model } from 'mongoose';
 import { TAGS } from '../constants/tags.js';
 

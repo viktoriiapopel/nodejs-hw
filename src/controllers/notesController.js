@@ -16,7 +16,6 @@ export const getAllNotes = async (req, res) => {
   }
 
   // Створюємо базовий запит до колекції
-  // const notesQwery = Note.find(filter);
   const notesQwery = Note.find({ userId: req.user._id });
 
   // Виконуємо одразу два запити паралельно
