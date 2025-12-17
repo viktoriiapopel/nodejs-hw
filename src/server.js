@@ -1,3 +1,6 @@
+import './loadEnv.js';
+dotenv.config();
+
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -10,8 +13,6 @@ import notesRoutes from './routes/notesRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import cookieParser from 'cookie-parser';
 import userRoutes from './routes/userRoutes.js';
-
-dotenv.config(); // Підвантажуємо .env
 
 const app = express();
 const PORT = process.env.PORT || 3000;
