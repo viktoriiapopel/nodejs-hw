@@ -1,8 +1,6 @@
 import './loadEnv.js';
-dotenv.config();
 
 import express from 'express';
-import dotenv from 'dotenv';
 import cors from 'cors';
 import { errors } from 'celebrate';
 import { connectMongoDB } from './db/connectMongoDB.js';
