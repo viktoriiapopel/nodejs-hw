@@ -1,58 +1,35 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import pinoHttp from 'pino-http';
+import { errors } from 'celebrate';
+import { connectMongoDB } from './db/connectMongoDB.js';
+import { logger } from './middleware/logger.js';
+import { notFoundHandler } from './middleware/notFoundHandler.js';
+import { errorHandler } from './middleware/errorHandler.js';
+import notesRoutes from './routes/notesRoutes.js';
 
 dotenv.config(); // Підвантажуємо .env
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// --- Стандартні Middleware ---
-app.use(cors()); // Дозволяє запити з інших доменів
-app.use(express.json()); // Дає змогу читати JSON у body
-
-// --- Middleware логування HTTP-запитів ---
-const logger = pinoHttp();
+// // --- Middleware логування HTTP-запитів ---
 app.use(logger);
 
-// --- Маршрути ---
-app.get('/', (req, res) => {
-  res.send('Welcome to Note API!');
-});
+// --- Стандартні Middleware ---
+app.use(express.json()); // Дає змогу читати JSON у body
+app.use(cors()); // Дозволяє запити з інших доменів
 
-app.get('/notes', (req, res) => {
-  res.status(200).json({ message: 'Retrieved all notes' });
-});
+app.use(notesRoutes);
 
-app.get('/notes/:noteId', (req, res) => {
-  const { noteId } = req.params;
-  res.status(200).json({ message: `Retrieved note with ID: ${noteId}` });
-});
+app.use(notFoundHandler);
 
-// Маршрут для тестування middleware помилки
-app.get('/test-error', () => {
-  throw new Error('Something went wrong');
-});
+app.use(errors());
 
-app.use((req, res) => {
-  res.status(404).json({ message: 'Route not found' });
-});
+app.use(errorHandler);
 
-// --- Middleware для обробки помилок ---
-app.use((err, req, res, next) => {
-  console.error(err);
+await connectMongoDB();
 
-  const isProd = process.env.NODE_ENV === 'production';
-
-  res.status(500).json({
-    message: isProd
-      ? 'Something went wrong. Please try again later.'
-      : err.message,
-  });
-});
-
-// --- Запуск сервера ---
 app.listen(PORT, () => {
-  console.log(`Server is running on port http://localhost:${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
